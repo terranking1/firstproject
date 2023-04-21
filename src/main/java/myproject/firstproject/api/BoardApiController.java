@@ -1,10 +1,8 @@
 package myproject.firstproject.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import myproject.firstproject.api.dto.board.*;
 import myproject.firstproject.domain.Board;
-import myproject.firstproject.repository.BoardRepository;
 import myproject.firstproject.service.BoardService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,37 +16,8 @@ public class BoardApiController {
 
     private final BoardService boardService;
 
-    //게시판 등록
-    @PostMapping("/api/boards")
-    public CreateBoardResponse createUser(@RequestBody @Valid CreateBoardRequest request) {
-        Board board = Board.createBoard(request.getName());
-
-        Long boardId = boardService.saveBoard(board);
-
-        return new CreateBoardResponse(boardId);
-    }
-
-    //게시판 이름 수정
-    @PostMapping("/api/boards/{id}")
-    public UpdateBoardResponse updateBoard(@PathVariable("id") Long id,
-                                           @RequestBody @Valid UpdateBoardRequest request) {
-        boardService.updateName(id, request.getName());
-        Board findBoard = boardService.findOneBoard(id);
-
-        return new UpdateBoardResponse(findBoard.getId(), findBoard.getName());
-    }
-
-    //게시판 삭제
-    @DeleteMapping("/api/boards/{id}")
-    public DeleteBoardResponse deleteBoard(@PathVariable("id") Long id) {
-        Board findBoard = boardService.findOneBoard(id);
-        boardService.deleteBoard(findBoard);
-
-        return new DeleteBoardResponse(id, findBoard.getName());
-    }
-
     //게시판 조회
-    @GetMapping("/api/boards")
+    @GetMapping("/api/board")
     public List<BoardDto> boards() {
         List<Board> findBoards = boardService.findAllBoards();
         List<BoardDto> result = findBoards.stream()
@@ -58,46 +27,35 @@ public class BoardApiController {
         return result;
     }
 
-    @Getter
-    @AllArgsConstructor
-    static class BoardDto {
-        private Long id;
-        private String name;
+    //게시판 등록
+    @PostMapping("/api/board")
+    public CreateBoardResponseDto createUser(@RequestBody @Valid CreateBoardRequestDto request) {
+        Board board = Board.createBoard(request.getName());
 
-        public BoardDto(Board board) {
-            id = board.getId();
-            name = board.getName();
-        }
+        Long boardId = boardService.saveBoard(board);
+
+        return new CreateBoardResponseDto(boardId);
     }
 
-    @Getter
-    static class CreateBoardRequest {
-        private String name;
+    //게시판 이름 수정
+    @PostMapping("/api/board/{id}")
+    public UpdateBoardResponseDto updateBoard(@PathVariable("id") Long id,
+                                              @RequestBody @Valid UpdateBoardRequestDto request) {
+        boardService.updateName(id, request.getName());
+        Board findBoard = boardService.findOneBoard(id);
+
+        return new UpdateBoardResponseDto(findBoard.getId(), findBoard.getName());
     }
 
-    @Getter
-    @AllArgsConstructor
-    static class CreateBoardResponse {
-        private Long id;
+    //게시판 삭제
+    @DeleteMapping("/api/board/{id}")
+    public DeleteBoardResponseDto deleteBoard(@PathVariable("id") Long id) {
+        Board findBoard = boardService.findOneBoard(id);
+        boardService.deleteBoard(findBoard);
+
+        return new DeleteBoardResponseDto(id, findBoard.getName());
     }
 
-    @Getter
-    static class UpdateBoardRequest {
-        private String name;
-    }
 
-    @Getter
-    @AllArgsConstructor
-    static class UpdateBoardResponse {
-        private Long id;
-        private String name;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    static class DeleteBoardResponse {
-        private Long id;
-        private String name;
-    }
 
 }
