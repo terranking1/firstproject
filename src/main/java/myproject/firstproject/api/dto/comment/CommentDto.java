@@ -11,12 +11,14 @@ public class CommentDto {
     private Long commentId;
     private Long postId;
     private String userNickname;
+    private String contents;
     private LocalDateTime commentRegDate;
 
     public CommentDto(Comment comment) {
         commentId = comment.getId();
         postId = comment.getPost().getId();
         userNickname = comment.getUser().getNickname();
+        contents = comment.getContents();
         commentRegDate = comment.getRegDate();
     }
 }

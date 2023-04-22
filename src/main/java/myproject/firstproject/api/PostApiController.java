@@ -1,5 +1,7 @@
 package myproject.firstproject.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "post", description = "게시글 API")
 @RestController
 @RequiredArgsConstructor
 public class PostApiController {
@@ -24,6 +27,7 @@ public class PostApiController {
     private final PostRepository postRepository;
 
     //게시글 조회
+    @Operation(summary = "게시글 조회", description = "게시글을 조회합니다.")
     @GetMapping("/api/post")
     public List<PostDto> posts(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
@@ -37,6 +41,7 @@ public class PostApiController {
     }
 
     //게시글 등록
+    @Operation(summary = "게시글 등록", description = "게시글을 등록합니다.")
     @PostMapping("/api/post")
     public CreatePostResponseDto createPost(@RequestBody @Valid CreatePostRequestDto request) {
         Long postId = postService.savePost(request.getUserId(), request.getBoardId(), request.getTitle(), request.getContents());
@@ -45,6 +50,7 @@ public class PostApiController {
     }
 
     //게시글 제목, 내용 수정
+    @Operation(summary = "게시글 수정", description = "게시글의 제목, 내용을 수정합니다.")
     @PostMapping("/api/post/{id}")
     public UpdatePostResponseDto updatePost(@PathVariable("id") Long id,
                                             @RequestBody @Valid UpdatePostRequestDto request) {
@@ -55,6 +61,7 @@ public class PostApiController {
     }
 
     //게시글 삭제
+    @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다.")
     @DeleteMapping("/api/post/{id}")
     public DeletePostResponseDto deletePost(@PathVariable("id") Long id) {
         Post findPost = postService.findOnePost(id);

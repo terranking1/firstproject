@@ -17,3 +17,18 @@ logging:
     org.hibernate.SQL: debug
 #    org.hibernate.type: trace
 
+# Swagger springdoc-ui Configuration
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: swagger.html            # Swagger UI ?? => localhost:8000/swagger.html
+    tags-sorter:            # alpha: ??? ? ?? ??, method: HTTP Method ? ??
+    operations-sorter:       # alpha: ??? ? ?? ??, method: HTTP Method ? ??
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+
